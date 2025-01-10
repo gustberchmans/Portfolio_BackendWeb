@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -19,6 +20,12 @@ class UserController extends Controller
         $user->save();
 
         return back()->with('success', 'User admin status updated successfully.');
+    }
+
+    public function show(User $user)
+    {
+        // Return the view with the user data
+        return view('users.profile', compact('user'));
     }
 }
 

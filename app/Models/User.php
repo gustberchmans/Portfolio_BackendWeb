@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'birthday',      // Add the birthday field
+        'about',         // Add the about text field
+        'profile_picture', // Add the profile_picture field
     ];
 
     /**
@@ -45,4 +48,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function profilePicture()
+    {
+        return $this->hasOne(ProfilePicture::class);
+    }
+
 }

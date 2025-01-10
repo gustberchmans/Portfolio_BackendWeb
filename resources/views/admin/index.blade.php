@@ -1,5 +1,13 @@
 <x-app-layout>
     <div class="container mx-auto mt-8">
+        <h1 class="text-2xl font-bold mb-6">Users List</h1>
+
+        @if(session('success'))
+            <div class="p-4 mb-4 text-green-800 bg-green-100 border border-green-300 rounded">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <table class="table-auto w-full border-collapse border border-gray-300">
             <thead>
                 <tr>
@@ -19,7 +27,7 @@
                             <form method="POST" action="{{ route('users.toggleAdmin', $user) }}">
                                 @csrf
                                 @method('PATCH')
-                                <button type="submit" class="px-4 py-2 bg-blue-500 rounded" style="color: blue; text-decoration: underline;">
+                                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">
                                     {{ $user->isAdmin ? 'Remove Admin' : 'Make Admin' }}
                                 </button>
                             </form>

@@ -24,17 +24,39 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request)
     {
-        $request->user()->fill($request->validated());
+        $user = auth()->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Validate all fields
+        $request->validate([
+            'birthday' => 'nullable|date',
+            'about' => 'nullable|string|max:500',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Update the user fields
+        $user->birthday = $request->input('birthday', $user->birthday);
+        $user->about = $request->input('about', $user->about);
+
+        // Handle profile picture upload
+        if ($request->hasFile('profile_picture')) {
+            $image = $request->file('profile_picture');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $path = $image->storeAs('profile_pictures', $filename, 'public');
+
+            // Store the profile picture
+            $user->profilePicture()->updateOrCreate(
+                ['user_id' => $user->id],
+                ['filename' => $filename]
+            );
         }
 
-        $request->user()->save();
+        // Save updated user data
+        $user->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        // Redirect back with a success message
+        return redirect()->route('profile.edit')->with('status', 'profile-updated');
     }
 
     /**

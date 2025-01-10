@@ -1,26 +1,29 @@
-<!-- resources/views/dashboard.blade.php -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container text-center mt-5">
-        <h1>Welcome to Your Dashboard</h1>
-        <p>You are now logged in!</p>
-        <div>
-            <a href="{{ route('users.index') }}" class="px-4 py-2 bg-green-500 text-black rounded">View All Users</a>
+<x-app-layout>
+    <div class="flex space-x-6">
+        <!-- Sidebar -->
+        <div class="bg-gray-800 text-white w-64 min-h-screen p-4">
+            <h2 class="text-xl font-semibold">Users List</h2>
+
+            <ul class="space-y-2 mt-4">
+                @foreach ($users as $user)
+                    <li>
+                        <a href="{{ route('users.show', $user->id) }}" class="block p-2 rounded hover:bg-gray-700">
+                            {{ $user->name }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+
+            <!-- Pagination Links -->
+            <div class="mt-4">
+                {{ $users->links() }}  <!-- Pagination links to navigate through pages -->
+            </div>
         </div>
-        <a href="{{ route('logout') }}" class="btn btn-danger"
-           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-           Logout
-        </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
+
+        <!-- Main Content -->
+        <div class="flex-1" style="margin-left: 10px">
+            <h3 class="text-xl font-semibold mb-4">Welcome to the Dashboard</h3>
+            <p>Manage your users and their details here.</p>
+        </div>
     </div>
-</body>
-</html>
+</x-app-layout>

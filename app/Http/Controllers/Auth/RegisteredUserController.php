@@ -31,20 +31,25 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'isAdmin' => ['nullable', 'boolean'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'isAdmin' => $request->has('isAdmin'), // Set isAdmin based on the checkbox
         ]);
 
         event(new Registered($user));
 
-        Auth::login($user);
+        auth()->login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Redirect based on admin status
+        return $user->isAdmin
+            ? redirect('/admin-dashboard') // Redirect admins to a different page
+            : redirect('/dashboard'); // Redirect regular users to the dashboard
     }
 }

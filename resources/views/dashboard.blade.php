@@ -21,8 +21,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1" style="margin-left: 10px">
-            <h3 class="text-xl font-semibold mb-4">Welcome to the Dashboard</h3>
+        <div class="flex-1" style="margin: 10px">
             <!-- News Feed Section -->
             <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
                 <h2 class="text-xl font-semibold mb-4">Latest News</h2>

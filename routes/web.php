@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\NewsFeedController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -65,5 +66,19 @@ Route::middleware(['auth'])->group(function () {  // admin only
 });
 
 Route::get('/dashboard', [DashboardController::class, 'showDashboard'])->name('dashboard');
+
+Route::get('/admin-dashboard', [AdminController::class, 'index'])->middleware(['auth'])->name('admin.dashboard');
+
+Route::get('/admin/news-feed', [NewsFeedController::class, 'index'])->middleware(['auth'])->name('news_feed.news-feed');
+
+// Route to show the create news article form
+Route::get('/news-feed/create', [NewsFeedController::class, 'create'])->name('news-feed.create')->middleware('auth');
+
+// Route to store the new news article
+Route::post('/news-feed', [NewsFeedController::class, 'store'])->name('news-feed.store')->middleware('auth');
+
+// Route to delete a news article
+// Route::delete('/news-feed/{news}', [NewsFeedController::class, 'destroy'])->name('news-feed.destroy')->middleware('auth', 'isAdmin');
+
 
 require __DIR__.'/auth.php';

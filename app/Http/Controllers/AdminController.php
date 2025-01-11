@@ -5,6 +5,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\NewsFeed;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -12,25 +13,12 @@ class AdminController extends Controller
     // Display the list of users with a checkbox to edit their isAdmin status
     public function index()
     {
+        $newsFeed = NewsFeed::latest()->take(5)->get();
         $users = User::all();  // Get all users
-        return view('admin-dashboard', compact('users'));
+        return view('admin-dashboard', compact('users', 'newsFeed'));
     }
 
     // Update the isAdmin status of a user
-    public function update(Request $request, User $user)
-    {
-        // Validate if the logged-in user is an admin
-        $request->validate([
-            'isAdmin' => 'required|boolean',
-        ]);
-
-        // Update the user's isAdmin status
-        $user->isAdmin = $request->input('isAdmin');
-        $user->save();
-
-        return redirect()->route('admin.dashboard')->with('success', 'User admin status updated!');
-    }
-
     public function update(Request $request, $userId)
     {
         // Find the user by their ID

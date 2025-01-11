@@ -43,7 +43,16 @@ class NewsFeedController extends Controller
             'picture_id' => $pictureId,
         ]);
 
-        return redirect()->route('news_feed.index')->with('success', 'News Feed created successfully!');
+        return redirect()->route('news_feed.news-feed')->with('success', 'News Feed created successfully!');
+    }
+
+    public function index()
+    {
+        // Fetch all the news feed items
+        $newsFeed = NewsFeed::latest()->get();
+
+        // Return the view with the news feed
+        return view('news_feed.news-feed', compact('newsFeed'));
     }
 }
 

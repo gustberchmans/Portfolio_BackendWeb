@@ -13,9 +13,18 @@ Route::get('/', function () {
 
 Route::view('/dashboard', 'dashboard')->middleware(['auth'])->name('dashboard');
 
+// routes/web.php
+
 Route::get('/admin-dashboard', function () {
-    return view('admin-dashboard');
+    // Check if the user is logged in and is an admin
+    if (Auth::check() && Auth::user()->isAdmin) {
+        return view('admin-dashboard');  // Only allow admins to view the admin dashboard
+    }
+
+    // Redirect non-admin users to the regular dashboard
+    return redirect()->route('dashboard')->with('error', 'Access denied: Admins only.');
 })->middleware(['auth'])->name('admin.dashboard');
+
 
 
 Route::middleware('auth')->group(function () {

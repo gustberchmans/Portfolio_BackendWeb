@@ -12,7 +12,7 @@ class WelcomeController extends Controller
         // Fetch 25 users to display in the sidebar
         $users = User::paginate(25); // Assuming you want to display 25 users per page.
 
-        // Pass the data to the view
+        // Return the data to the view
         return view('welcome', compact('users'));
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\NewsFeedController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -52,11 +53,17 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
-// Show the user creation form
+// Show the user creation form admin only
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
 
 // Store the new user in the database
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
+Route::middleware(['auth'])->group(function () {  // admin only
+    Route::get('/news_feed/create', [NewsFeedController::class, 'create'])->name('news_feed.create');
+    Route::post('/news_feed', [NewsFeedController::class, 'store'])->name('news_feed.store');
+});
+
+Route::get('/dashboard', [DashboardController::class, 'showDashboard'])->name('dashboard');
 
 require __DIR__.'/auth.php';

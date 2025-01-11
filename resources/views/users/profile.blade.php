@@ -8,18 +8,26 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    <h3 class="text-2xl font-semibold">{{ $user->name }}</h3>
-                    {{-- <p class="mt-2 text-gray-700">Email: {{ $user->email }}</p> --}}
-                    <p class="mt-2 text-gray-700">Birthday: {{ $user->birthday ? $user->birthday : 'Not provided' }}</p>
-                    <p class="mt-2 text-gray-700">About: {{ $user->about }}</p>
+                <div class="max-w-xl flex items-start space-x-4">
+                    <!-- Profile Picture -->
+                    <div style="display: flex; align-items: center; margin-right: 32px">
+                        @if ($user->profilePicture && $user->profilePicture->file_data)
+                            <img
+                                src="data:{{ $user->profilePicture->file_type }};base64,{{ base64_encode($user->profilePicture->file_data) }}"
+                                alt="Profile Picture"
+                                class="w-32 h-32 rounded-full"
+                                style="height: 88px; width: 88px;"
+                            />
+                        @endif
+                    </div>
 
-                    <!-- Display profile picture if available -->
-                    @if ($user->profilePicture)
-                        <img src="{{ asset('storage/profile_pictures/' . $user->profilePicture->filename) }}" alt="Profile Picture" class="rounded-full w-32 h-32">
-                    @else
-                        <p class="mt-2 text-gray-700">No profile picture available</p>
-                    @endif
+                    <!-- User Info -->
+                    <div class="flex-1">
+                        <h3 class="text-2xl font-semibold">{{ $user->name }}</h3>
+                        {{-- <p class="mt-2 text-gray-700">Email: {{ $user->email }}</p> --}}
+                        <p class="mt-2 text-gray-700">Birthday: {{ $user->birthday ? $user->birthday : 'Not provided' }}</p>
+                        <p class="mt-2 text-gray-700">About: {{ $user->about }}</p>
+                    </div>
                 </div>
             </div>
         </div>

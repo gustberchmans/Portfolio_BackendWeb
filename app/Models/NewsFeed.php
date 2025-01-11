@@ -11,7 +11,7 @@ class NewsFeed extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'content', 'date', 'picture_id'];
+    protected $fillable = ['title', 'content', 'date'];
 
     // Relationship with Picture model
     public function picture()

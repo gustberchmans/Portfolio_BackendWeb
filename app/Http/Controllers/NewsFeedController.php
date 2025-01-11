@@ -24,24 +24,34 @@ class NewsFeedController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'date' => 'required|date',
-            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048', // Validate image upload
+            'image' => 'nullable|image|max:2048', // Validate image upload
         ]);
 
         // Handle image upload if present
         $pictureId = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $picture = Picture::create(['path' => $imagePath]);
+            // Get the uploaded image
+            $image = $request->file('image');
+            $fileData = file_get_contents($image->getRealPath());
+            $fileType = $image->getClientMimeType();
+
+            // Create a new Picture model and store the image as a BLOB
+            $picture = new Picture();
+            $picture->file_data = $fileData;
+            $picture->file_type = $fileType;
+            $picture->save();
+
+            // Get the ID of the saved picture
             $pictureId = $picture->id;
         }
 
-        // Create the news feed
-        NewsFeed::create([
-            'title' => $request->title,
-            'content' => $request->content,
-            'date' => $request->date,
-            'picture_id' => $pictureId,
-        ]);
+        // Create the news feed and associate the picture_id
+        $newsFeed = new NewsFeed();
+        $newsFeed->title = $request->title;
+        $newsFeed->content = $request->content;
+        $newsFeed->date = $request->date;
+        $newsFeed->picture_id = $pictureId;  // Associate the picture ID with the news feed
+        $newsFeed->save();  // Save the news feed with the picture_id
 
         return redirect()->route('news_feed.news-feed')->with('success', 'News Feed created successfully!');
     }
@@ -72,21 +82,43 @@ class NewsFeedController extends Controller
     // Update the specified news article in the database
     public function update(Request $request, NewsFeed $news)
     {
-        // Validate the incoming request
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'date' => 'required|date',
+            'image' => 'nullable|image|max:2048',  // Validate image (optional)
         ]);
 
-        // Update the news article with the new values
+        // Update the news article
         $news->update([
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
-            'date' => $request->input('date'),
+            'title' => $request->title,
+            'content' => $request->content,
+            'date' => $request->date,
         ]);
 
-        // Redirect back to the news feed with a success message
+        // Handle image upload if there is a new image
+        if ($request->hasFile('image')) {
+            // Get the uploaded image
+            $image = $request->file('image');
+            $fileData = file_get_contents($image->getRealPath());
+            $fileType = $image->getClientMimeType();
+
+            // Create a new Picture model and store the image
+            $picture = new Picture();
+            $picture->file_data = $fileData;
+            $picture->file_type = $fileType;
+            $picture->save();
+
+            // Associate the picture with the news article
+            $news->picture()->associate($picture);
+            $news->save();
+        }
+
         return redirect()->route('news_feed.news-feed')->with('success', 'News article updated successfully!');
     }
-}
+
+    public function show(NewsFeed $news)
+    {
+        return view('news_feed.show', compact('news'));
+    }
+};

@@ -9,11 +9,11 @@ class Picture extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['path'];
+    protected $fillable = ['file_data', 'file_type'];
 
-    // Relationship with NewsFeed model
-    public function newsFeeds()
+    // Define the relationship to the News model
+    public function news()
     {
-        return $this->hasMany(NewsFeed::class);
+        return $this->belongsTo(NewsFeed::class);
     }
 }

@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
+use App\Models\ProfilePicture;
 
 class ProfileController extends Controller
 {
@@ -16,8 +18,12 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $user = $request->user();  // Get the logged-in user
+        $profilePicture = $user->profilePicture;  // Use the relationship to get the profile picture
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
+            'profilePicture' => $profilePicture,  // Pass profilePicture to the view
         ]);
     }
 
@@ -41,14 +47,20 @@ class ProfileController extends Controller
 
         // Handle profile picture upload
         if ($request->hasFile('profile_picture')) {
-            $image = $request->file('profile_picture');
-            $filename = time() . '.' . $image->getClientOriginalExtension();
-            $path = $image->storeAs('profile_pictures', $filename, 'public');
+            $file = $request->file('profile_picture');
 
-            // Store the profile picture
-            $user->profilePicture()->updateOrCreate(
-                ['user_id' => $user->id],
-                ['filename' => $filename]
+            // Convert the image file into binary data
+            $fileData = file_get_contents($file->getRealPath());
+
+            // Save the image metadata and binary data in the 'profile_pictures' table
+            $profilePicture = ProfilePicture::updateOrCreate(
+                ['user_id' => auth()->id()], // Find the profile picture by the user ID
+                [
+                    'file_data' => $fileData,
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_size' => $file->getSize(),
+                    'file_type' => $file->getMimeType(),
+                ]
             );
         }
 
@@ -58,7 +70,6 @@ class ProfileController extends Controller
         // Redirect back with a success message
         return redirect()->route('profile.edit')->with('status', 'profile-updated');
     }
-
     /**
      * Delete the user's account.
      */

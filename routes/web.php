@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\NewsFeedController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProfilePictureController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -89,7 +90,9 @@ Route::resource('news', NewsFeedController::class);
 Route::get('/news-feed/{news}/edit', [NewsFeedController::class, 'edit'])->name('news-feed.edit');
 Route::put('/news-feed/{news}', [NewsFeedController::class, 'update'])->name('news-feed.update');
 
+Route::post('/profile-picture', [ProfilePictureController::class, 'update'])->name('profile.picture.update');
 
+Route::get('/news-feed/{news}', [NewsFeedController::class, 'show'])->name('news-feed.show');
 
 
 require __DIR__.'/auth.php';

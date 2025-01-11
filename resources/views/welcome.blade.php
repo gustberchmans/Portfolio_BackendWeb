@@ -27,14 +27,21 @@
                 <h2 class="text-xl font-semibold mb-4">Latest News</h2>
 
                 @forelse($newsFeed as $news)
-                    <div class="border-b border-gray-300 py-4">
-                        <h3 class="font-bold text-lg">{{ $news->title }}</h3>
-                        <p class="text-sm text-gray-600">{{ $news->date }}</p>
-                        <p class="mt-2">{{ Str::limit($news->content, 150) }}</p>
+                    <div class="border-b border-gray-300 py-4 flex items-center justify-between">
+                        <div class="flex-1">
+                            <!-- Make the title clickable -->
+                            <p class="font-bold text-lg text-blue-600 hover:underline">
+                                {{ $news->title }}
+                            </p>
+                            <p class="text-sm text-gray-600">{{ $news->date }}</p>
+                            <p class="mt-2">{{ Str::limit($news->content, 150) }}</p>
+                        </div>
 
                         <!-- Display Image (if exists) -->
-                        @if($news->image)
-                            <img src="{{ asset('storage/images/' . $news->image->filename) }}" alt="Image" class="mt-4 max-w-full h-auto">
+                        @if ($news->picture)
+                            <div class="ml-4">
+                                <img src="data:image/{{ $news->picture->file_type }};base64,{{ base64_encode($news->picture->file_data) }}" alt="Current Image" class="w-32 h-32 rounded-md" style="height: 100px; width: auto">
+                            </div>
                         @endif
                     </div>
                 @empty

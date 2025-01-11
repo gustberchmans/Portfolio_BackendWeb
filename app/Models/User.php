@@ -24,6 +24,7 @@ class User extends Authenticatable
         'birthday',      // Add the birthday field
         'about',         // Add the about text field
         'profile_picture', // Add the profile_picture field
+        'isAdmin',      // Add the is_admin field
     ];
 
     /**
@@ -46,6 +47,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'isAdmin' => 'boolean',
         ];
     }
 

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WelcomeController;
 
@@ -24,9 +25,17 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::patch('/users/{user}/toggle-admin', [UserController::class, 'toggleAdmin'])->name('users.toggleAdmin');
 });
+
+Route::get('/users', function () {
+    if (Auth::check() && Auth::user()->isAdmin) {
+        // Admins can access the UserController index method
+        return app(UserController::class)->index();
+    }
+    // Redirect all other users to the dashboard with an error message
+    return redirect()->route('dashboard')->with('error', 'Access denied: Admins only.');
+})->name('users.index')->middleware('auth');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');

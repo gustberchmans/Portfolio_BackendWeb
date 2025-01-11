@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
     public function index()
     {
-        // Fetch all users
-        $users = \App\Models\User::all();
+        if (!Auth::user()->isAdmin) {
+            abort(403, 'Unauthorized access');
+        }
+
+        $users = User::all(); // Fetch all users
         return view('users.index', compact('users'));
     }
 

@@ -1,5 +1,14 @@
 <x-app-layout>
     <div class="container mx-auto mt-8">
+        <!-- Add User Button -->
+        <div class="mb-4 text-right">
+            <br>
+            <a href="{{ route('users.create') }}" class="px-4 py-2 bg-green-500 text-white rounded" style="background: rgb(59, 208, 59); margin: 10px;">
+                Add User
+            </a>
+            <br>
+        </div>
+
         @if(session('error'))
             <div class="bg-red-500 text-white p-4 rounded mb-4">
                 {{ session('error') }}
@@ -26,7 +35,7 @@
                             <form method="POST" action="{{ route('users.toggleAdmin', $user) }}">
                                 @csrf
                                 @method('PATCH')
-                                <button type="submit" class="px-4 py-2 bg-blue-500 rounded text-white">
+                                <button type="submit" class="px-4 py-2 bg-blue-500 rounded text-white" style="background: rgb(59, 59, 208); margin-right: 10px;">
                                     {{ $user->isAdmin ? 'Remove Admin' : 'Make Admin' }}
                                 </button>
                             </form>

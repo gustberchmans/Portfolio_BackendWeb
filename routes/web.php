@@ -26,6 +26,8 @@ Route::get('/admin-dashboard', function () {
 })->middleware(['auth'])->name('admin.dashboard');
 
 Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -49,5 +51,12 @@ Route::get('/users', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+
+// Show the user creation form
+Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+
+// Store the new user in the database
+Route::post('/users', [UserController::class, 'store'])->name('users.store');
+
 
 require __DIR__.'/auth.php';

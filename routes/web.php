@@ -25,7 +25,7 @@ Route::get('/admin-dashboard', function () {
     return redirect()->route('dashboard')->with('error', 'Access denied: Admins only.');
 })->middleware(['auth'])->name('admin.dashboard');
 
-
+Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

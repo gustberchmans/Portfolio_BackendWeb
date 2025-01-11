@@ -21,12 +21,22 @@
                         <td class="border border-gray-300 px-4 py-2">{{ $user->name }}</td>
                         <td class="border border-gray-300 px-4 py-2">{{ $user->email }}</td>
                         <td class="border border-gray-300 px-4 py-2">{{ $user->isAdmin ? 'Yes' : 'No' }}</td>
-                        <td class="border border-gray-300 px-4 py-2">
+                        <td class="border border-gray-300 px-4 py-2 flex items-center space-x-2 justify-end">
+                            <!-- Make Admin / Remove Admin Button -->
                             <form method="POST" action="{{ route('users.toggleAdmin', $user) }}">
                                 @csrf
                                 @method('PATCH')
-                                <button type="submit" class="px-4 py-2 bg-blue-500 rounded text-white" style="color: blue">
+                                <button type="submit" class="px-4 py-2 bg-blue-500 rounded text-white">
                                     {{ $user->isAdmin ? 'Remove Admin' : 'Make Admin' }}
+                                </button>
+                            </form>
+
+                            <!-- Delete Button (with Trash Icon) -->
+                            <form method="POST" action="{{ route('users.destroy', $user) }}" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>
                         </td>

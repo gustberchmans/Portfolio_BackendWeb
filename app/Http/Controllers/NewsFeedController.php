@@ -54,5 +54,39 @@ class NewsFeedController extends Controller
         // Return the view with the news feed
         return view('news_feed.news-feed', compact('newsFeed'));
     }
-}
 
+    public function destroy(NewsFeed $news)
+    {
+        // Delete the article
+        $news->delete();
+
+        // Redirect back to the news feed page with a success message
+        return redirect()->route('news_feed.news-feed')->with('success', 'News article deleted successfully!');
+    }
+
+    public function edit(NewsFeed $news)
+    {
+        return view('news_feed.edit', compact('news'));
+    }
+
+    // Update the specified news article in the database
+    public function update(Request $request, NewsFeed $news)
+    {
+        // Validate the incoming request
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'date' => 'required|date',
+        ]);
+
+        // Update the news article with the new values
+        $news->update([
+            'title' => $request->input('title'),
+            'content' => $request->input('content'),
+            'date' => $request->input('date'),
+        ]);
+
+        // Redirect back to the news feed with a success message
+        return redirect()->route('news_feed.news-feed')->with('success', 'News article updated successfully!');
+    }
+}

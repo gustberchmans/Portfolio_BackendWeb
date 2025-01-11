@@ -18,12 +18,9 @@ Route::view('/dashboard', 'dashboard')->middleware(['auth'])->name('dashboard');
 // routes/web.php
 
 Route::get('/admin-dashboard', function () {
-    // Check if the user is logged in and is an admin
     if (Auth::check() && Auth::user()->isAdmin) {
         return view('admin-dashboard');  // Only allow admins to view the admin dashboard
     }
-
-    // Redirect non-admin users to the regular dashboard
     return redirect()->route('dashboard')->with('error', 'Access denied: Admins only.');
 })->middleware(['auth'])->name('admin.dashboard');
 
@@ -50,7 +47,15 @@ Route::get('/users', function () {
     return redirect()->route('dashboard')->with('error', 'Access denied: Admins only.');
 })->name('users.index')->middleware('auth');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', function () {
+    if (Auth::check() && Auth::user()->isAdmin) {
+        // If the user is an admin, redirect them to the admin dashboard
+        return redirect()->route('admin.dashboard');
+    }
+    // If the user is not an admin, continue to the regular user dashboard
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
@@ -78,7 +83,13 @@ Route::get('/news-feed/create', [NewsFeedController::class, 'create'])->name('ne
 Route::post('/news-feed', [NewsFeedController::class, 'store'])->name('news-feed.store')->middleware('auth');
 
 // Route to delete a news article
-// Route::delete('/news-feed/{news}', [NewsFeedController::class, 'destroy'])->name('news-feed.destroy')->middleware('auth', 'isAdmin');
+Route::delete('/news-feed/{news}', [NewsFeedController::class, 'destroy'])->name('news-feed.destroy')->middleware('auth');
+// Resource route for NewsFeed
+Route::resource('news', NewsFeedController::class);
+Route::get('/news-feed/{news}/edit', [NewsFeedController::class, 'edit'])->name('news-feed.edit');
+Route::put('/news-feed/{news}', [NewsFeedController::class, 'update'])->name('news-feed.update');
+
+
 
 
 require __DIR__.'/auth.php';

@@ -14,19 +14,44 @@
                 @auth
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         @if (Auth::user()->isAdmin)
-                            <!-- If user is an admin, show Admin Dashboard link -->
+                            <!-- Admin Dashboard link -->
                             <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
+
+                            <!-- Admin FAQ link -->
+                            <x-nav-link :href="route('faq.admin')" :active="request()->routeIs('faq.admin')">
+                                {{ __('FAQ') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')">
+                                {{ __('Contact') }}
+                            </x-nav-link>
                         @else
-                            <!-- If user is not an admin, show User Dashboard link -->
+                            <!-- User Dashboard link -->
                             <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
+
+                            <!-- User FAQ link -->
+                            <x-nav-link :href="route('user.faq')" :active="request()->routeIs('user.faq')">
+                                {{ __('FAQ') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')">
+                                {{ __('Contact') }}
+                            </x-nav-link>
                         @endif
                     </div>
+                @else
+                    <!-- Guest User FAQ link -->
+                    <x-nav-link :href="route('user.faq')" :active="request()->routeIs('user.faq')">
+                        {{ __('FAQ') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')">
+                        {{ __('Contact') }}
+                    </x-nav-link>
                 @endauth
-
             </div>
 
             <!-- Settings Dropdown -->

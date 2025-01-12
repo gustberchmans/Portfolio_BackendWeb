@@ -9,6 +9,9 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\NewsFeedController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfilePictureController;
+use App\Http\Controllers\FaqController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -94,5 +97,36 @@ Route::post('/profile-picture', [ProfilePictureController::class, 'update'])->na
 
 Route::get('/news-feed/{news}', [NewsFeedController::class, 'show'])->name('news-feed.show');
 
+// Admin FAQ Route
+Route::get('/admin/faq', function () {
+    return view('faq.admin'); // Separate Blade file for admin FAQ
+})->name('admin.faq')->middleware('auth');
+
+// Guest User FAQ Route (accessible to everyone, no authentication required)
+Route::get('/faq', [FaqController::class, 'index'])->name('user.faq');
+
+// Admin FAQ Route
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/faq', [FaqController::class, 'admin'])->name('faq.admin'); // Admin-specific FAQ
+
+    // Admin FAQ Management Routes
+    Route::get('/faq/create', [FaqController::class, 'create'])->name('faq.create');
+    Route::post('/faq', [FaqController::class, 'store'])->name('faq.store');
+    Route::get('/faq/{faq}/edit', [FaqController::class, 'edit'])->name('faq.edit');
+    Route::put('/faq/{faq}', [FaqController::class, 'update'])->name('faq.update');
+    Route::delete('/faq/{faq}', [FaqController::class, 'destroy'])->name('faq.destroy');
+});
+
+Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
+Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
+Route::get('/category/{category}/edit', [CategoryController::class, 'edit'])->name('category.edit');
+Route::put('/category/{category}', [CategoryController::class, 'update'])->name('category.update');
+Route::delete('/category/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
+
+Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
+Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
+
+Route::get('/contact', [ContactController::class, 'showForm'])->name('contact');
+Route::post('/contact', [ContactController::class, 'submitForm'])->name('contact.submit');
 
 require __DIR__.'/auth.php';

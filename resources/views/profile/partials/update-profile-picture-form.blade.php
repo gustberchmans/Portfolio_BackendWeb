@@ -7,6 +7,14 @@
         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
             {{ __("Update your account's profile picture.") }}
         </p>
+        @if ($user->profilePicture && $user->profilePicture->file_data)
+            <img
+                src="data:{{ $user->profilePicture->file_type }};base64,{{ base64_encode($user->profilePicture->file_data) }}"
+                alt="Profile Picture"
+                class="w-32 h-32 rounded-full"
+                style="height: 88px; width: 88px;"
+            />
+        @endif
     </header>
 
     <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="mt-6 space-y-6">

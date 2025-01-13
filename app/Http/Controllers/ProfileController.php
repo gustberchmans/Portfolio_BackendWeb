@@ -36,6 +36,8 @@ class ProfileController extends Controller
 
         // Validate all fields
         $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'birthday' => 'nullable|date',
             'about' => 'nullable|string|max:500',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -64,7 +66,7 @@ class ProfileController extends Controller
             );
         }
 
-        // Save updated user data
+        $user->fill($request->only('birthday', 'about', 'name', 'email'));
         $user->save();
 
         // Redirect back with a success message

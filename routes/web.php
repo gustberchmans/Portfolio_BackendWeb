@@ -129,4 +129,17 @@ Route::post('/category', [CategoryController::class, 'store'])->name('category.s
 Route::get('/contact', [ContactController::class, 'showForm'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submitForm'])->name('contact.submit');
 
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.submit');
+// Route to display the reply form
+Route::middleware('auth')->group(function () {
+    // Admin contacts index route
+    Route::get('/admin/contacts', [ContactController::class, 'index'])->name('admin.contacts.index');
+
+    // Reply to a contact message
+    Route::get('/admin/contacts/{contact}/reply', [ContactController::class, 'showReplyForm'])->name('admin.contacts.reply');
+    Route::post('/admin/contacts/{contact}/reply', [ContactController::class, 'sendReply'])->name('admin.contacts.reply.send');
+});
+
+
+
 require __DIR__.'/auth.php';

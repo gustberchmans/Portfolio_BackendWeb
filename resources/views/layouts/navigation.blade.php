@@ -24,7 +24,7 @@
                                 {{ __('FAQ') }}
                             </x-nav-link>
 
-                            <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')">
+                            <x-nav-link :href="route('admin.contacts.index')" :active="request()->routeIs('admin.contacts.index')">
                                 {{ __('Contact') }}
                             </x-nav-link>
                         @else

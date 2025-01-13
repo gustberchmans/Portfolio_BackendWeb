@@ -24,11 +24,42 @@
                     <!-- User Info -->
                     <div class="flex-1">
                         <h3 class="text-2xl font-semibold">{{ $user->name }}</h3>
-                        {{-- <p class="mt-2 text-gray-700">Email: {{ $user->email }}</p> --}}
                         <p class="mt-2 text-gray-700">Birthday: {{ $user->birthday ? $user->birthday : 'Not provided' }}</p>
                         <p class="mt-2 text-gray-700">About: {{ $user->about }}</p>
                     </div>
                 </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4">Comments</h2>
+
+                <!-- Display Comments -->
+                @foreach ($user->comments as $comment)
+                    <div class="mb-4 p-4 border rounded-md">
+                        <p class="font-semibold">{{ $comment->author }}</p>
+                        <p class="text-gray-600 text-sm">{{ $comment->created_at->diffForHumans() }}</p>
+                        <p class="mt-2">{{ $comment->content }}</p>
+                    </div>
+                @endforeach
+
+                <!-- Comment Form -->
+                <form method="POST" action="{{ route('user.comments.store', $user->id) }}">
+                    @csrf
+                    <div class="mb-4">
+                        <label for="author" class="block text-gray-700">Your Name</label>
+                        <input type="text" name="author" id="author" class="mt-1 block w-full" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="content" class="block text-gray-700">Your Comment</label>
+                        <textarea name="content" id="content" class="mt-1 block w-full" rows="4" required></textarea>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Submit Comment</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

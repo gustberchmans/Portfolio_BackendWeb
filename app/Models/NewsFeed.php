@@ -18,4 +18,9 @@ class NewsFeed extends Model
     {
         return $this->belongsTo(Picture::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'news_feed_id');
+    }
 }

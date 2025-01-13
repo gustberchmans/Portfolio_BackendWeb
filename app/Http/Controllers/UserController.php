@@ -33,7 +33,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        // Return the view with the user data
+        $user = User::with('comments')->findOrFail($user->id);
         return view('users.profile', compact('user'));
     }
 
@@ -76,6 +76,24 @@ class UserController extends Controller
 
         // Redirect with success message
         return redirect()->route('users.index')->with('success', 'User added successfully');
+    }
+
+    public function storeComment(Request $request, $userId)
+    {
+        $request->validate([
+            'author' => 'required|string|max:255',
+            'content' => 'required|string|max:1000',
+        ]);
+
+        $user = User::findOrFail($userId);
+
+        // Create a new comment
+        $user->comments()->create([
+            'author' => $request->author,
+            'content' => $request->content,
+        ]);
+
+        return redirect()->route('users.profile', $userId)->with('status', 'Comment added!');
     }
 }
 

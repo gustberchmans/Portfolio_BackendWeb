@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\ProfilePicture;
+use App\Models\ProfileComment;
 
 class User extends Authenticatable
 {
@@ -55,6 +56,11 @@ class User extends Authenticatable
     public function profilePicture()
     {
         return $this->hasOne(ProfilePicture::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(ProfileComment::class); // One-to-many relationship
     }
 
 }

@@ -12,6 +12,7 @@ use App\Http\Controllers\ProfilePictureController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CommentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -140,6 +141,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/contacts/{contact}/reply', [ContactController::class, 'sendReply'])->name('admin.contacts.reply.send');
 });
 
+Route::post('/news/{news}/comments', [CommentController::class, 'store'])->name('news.comments.store');
 
+Route::get('/users/{id}', [UserController::class, 'show'])->name('users.profile');
+Route::post('/users/{user}/comments', [CommentController::class, 'storeComment'])->name('user.comments.store');
 
 require __DIR__.'/auth.php';

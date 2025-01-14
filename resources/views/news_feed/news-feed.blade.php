@@ -2,7 +2,7 @@
     <div class="container mt-5">
         <!-- Button to create a new news article -->
         <div class="mt-4">
-            <a href="{{ route('news-feed.create') }}" class="inline-block px-6 py-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 transition duration-200" style="background: rgb(29, 201, 56); height: 60px; width: 200px;">
+            <a href="{{ route('news_feed.create') }}" class="inline-block px-6 py-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 transition duration-200" style="background: rgb(29, 201, 56); height: 60px; width: 200px;">
                 Create News Article
             </a>
         </div>

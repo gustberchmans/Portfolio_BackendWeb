@@ -1,4 +1,4 @@
-<!-- resources/views/news_feed/create.blade.php -->
+<!-- resources/views/news-feed/create.blade.php -->
 
 <x-app-layout>
     <div class="container mx-auto mt-8">
@@ -17,7 +17,7 @@
         @endif
 
         <!-- News Feed Creation Form -->
-        <form method="POST" action="{{ route('news_feed.store') }}" enctype="multipart/form-data" class="space-y-4">
+        <form method="POST" action="{{ route('news-feed.store') }}" enctype="multipart/form-data" class="space-y-4">
             @csrf
 
             <!-- Title Field -->

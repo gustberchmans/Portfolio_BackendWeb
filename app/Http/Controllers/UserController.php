@@ -90,10 +90,10 @@ class UserController extends Controller
         // Create a new comment
         $user->comments()->create([
             'author' => $request->author,
-            'content' => $request->content,
+            'content' => $request->input('content'),
         ]);
 
-        return redirect()->route('users.profile', $userId)->with('status', 'Comment added!');
+        return redirect()->route('users.profile', $user->id)->with('success', 'Comment added successfully.');
     }
 }
 

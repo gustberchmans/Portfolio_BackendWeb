@@ -18,10 +18,10 @@ class CommentController extends Controller
 
         $news->comments()->create([
             'author' => $request->author,
-            'content' => $request->content,
+            'content' => $request->input('content'),
         ]);
 
-        return back()->with('status', 'Comment added successfully.');
+        return redirect()->route('news-feed.show', $news->id)->with('success', 'Comment added successfully.');
     }
 
     public function storeComment(Request $request, $userId)
@@ -36,10 +36,10 @@ class CommentController extends Controller
         // Create a new comment
         $user->comments()->create([
             'author' => $request->author,
-            'content' => $request->content,
+            'content' => $request->input('content'),
         ]);
 
-        return redirect()->route('users.profile', $userId)->with('status', 'Comment added!');
+        return redirect()->route('users.show', $user->id)->with('success', 'Comment added successfully.');
     }
 }
 

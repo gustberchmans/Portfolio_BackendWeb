@@ -19,7 +19,7 @@ class MealOrderController extends Controller
         $meals = Meal::all();
 
         // Pass news and meals to the view
-        return view('news.show', ['news' => $news, 'meals' => $meals]);
+        return view('news_feed.show', ['news' => $news, 'meals' => $meals]);
     }
 
     // Store the meal order
@@ -41,7 +41,7 @@ class MealOrderController extends Controller
             'news_feed_id' => $newsId, // Add the news_feed_id
         ]);
 
-        return redirect()->route('news.show', $newsId)->with('status', 'Order placed successfully!');
+        return redirect()->route('news-feed.show', $newsId)->with('status', 'Order placed successfully!');
     }
 
 }

@@ -13,6 +13,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\MealOrderController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -145,5 +146,8 @@ Route::post('/news/{news}/comments', [CommentController::class, 'store'])->name(
 
 Route::get('/users/{id}', [UserController::class, 'show'])->name('users.profile');
 Route::post('/users/{user}/comments', [CommentController::class, 'storeComment'])->name('user.comments.store');
+
+Route::get('/news-feed/{newsId}', [MealOrderController::class, 'show'])->name('news.show');  // Show news feed with meal options
+Route::post('/news-feed/{newsId}/order', [MealOrderController::class, 'storeOrder'])->name('news.order');  // Handle meal order
 
 require __DIR__.'/auth.php';

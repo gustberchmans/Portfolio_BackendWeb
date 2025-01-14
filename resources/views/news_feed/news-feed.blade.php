@@ -16,6 +16,21 @@
                         <h3 class="text-xl font-bold">{{ $news->title }}</h3>
                         <p class="text-gray-700">{{ $news->content }}</p>
                         <p class="text-sm text-gray-500">{{ $news->date }}</p>
+
+                        <!-- Display orders associated with this news article -->
+                        <h4 class="text-lg font-semibold mt-3">Orders:</h4>
+                        @if($news->orders->count() > 0)
+                            <ul>
+                                @foreach ($news->orders as $order)
+                                    <li class="text-gray-600">
+                                        Meal: {{ $order->meal->name }} (Quantity: {{ $order->quantity }}) -
+                                        Ordered by: {{ $order->user->name }} on {{ $order->created_at->format('Y-m-d') }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p class="text-sm text-gray-500">No orders placed yet.</p>
+                        @endif
                     </div>
 
                     <!-- Buttons (Edit, Delete) on the Right side -->

@@ -8,6 +8,7 @@ use App\Models\NewsFeed;
 use App\Models\Picture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Order;
 
 class NewsFeedController extends Controller
 {
@@ -60,9 +61,10 @@ class NewsFeedController extends Controller
     {
         // Fetch all the news feed items
         $newsFeed = NewsFeed::latest()->get();
+        $ordersFeed = NewsFeed::with('orders')->get();
 
         // Return the view with the news feed
-        return view('news_feed.news-feed', compact('newsFeed'));
+        return view('news_feed.news-feed', compact('newsFeed', 'ordersFeed'));
     }
 
     public function destroy(NewsFeed $news)

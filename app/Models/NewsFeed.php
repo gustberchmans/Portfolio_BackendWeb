@@ -23,4 +23,9 @@ class NewsFeed extends Model
     {
         return $this->hasMany(Comment::class, 'news_feed_id');
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class); // Assuming 'Order' is the related model
+    }
 }

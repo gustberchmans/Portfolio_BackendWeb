@@ -63,4 +63,8 @@ class User extends Authenticatable
         return $this->hasMany(ProfileComment::class); // One-to-many relationship
     }
 
+    public function meals()
+    {
+        return $this->belongsToMany(Meal::class, 'orders')->withPivot('quantity')->withTimestamps();
+    }
 }

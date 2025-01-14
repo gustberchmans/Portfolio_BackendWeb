@@ -38,7 +38,39 @@
                     Submit Comment
                 </button>
             </form>
+
+            <!-- Meal Order Section -->
+        <div class="mt-8">
+            <h2 class="font-bold text-xl mb-4">Order Meals</h2>
+
+            @php
+                // Fetch all available meals from the database directly in the view
+                $meals = App\Models\Meal::all();
+            @endphp
+
+            <!-- Meal Order Form -->
+            <form action="{{ route('news.order', $news->id) }}" method="POST">
+                <input type="hidden" name="news_feed_id" value="{{ $news->id }}">
+                @csrf
+                <div class="mb-4">
+                    <label for="meal_id" class="block text-sm font-medium">Select a Meal</label>
+                    <select name="meal_id" id="meal" class="w-full border-gray-300 rounded-md shadow-sm" required>
+                        @foreach ($meals as $meal)
+                            <option value="{{ $meal['id'] }}">{{ $meal['name'] }} - ${{ $meal['price'] }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="quantity" class="block text-sm font-medium">Quantity</label>
+                    <input type="number" name="quantity" id="quantity" class="w-full border-gray-300 rounded-md shadow-sm" required min="1">
+                </div>
+
+                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
+                    Place Order
+                </button>
+            </form>
+        </div>
         </div>
     </div>
 </x-app-layout>
-
